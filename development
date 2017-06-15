@@ -1,0 +1,9 @@
+[masters]
+master1.example.com private_ip=10.7.146.75
+master2.example.com private_ip=10.7.135.17
+master3.exmaple.com private_ip=10.7.141.71
+[workers]
+worker1.example.com private_ip=10.7.138.17
+worker2.example.com private_ip=10.7.138.13
+worker3.example.com private_ip=10.7.138.15
+

@@ -1,0 +1,41 @@
+- name: unarchive vault
+  unarchive:
+    src: vault_0.7.3_linux_amd64.zip
+    dest: /usr/local/bin
+
+- name: set executable bit for vault
+  file:
+    path: /usr/local/bin/vault
+    mode: a+x
+
+- name: ensure systemd dir exists
+  file:
+    path: /usr/local/lib/systemd/system
+    recurse: yes
+    state: directory
+
+- name: copy vault service
+  copy:
+    src: vault.service
+    dest: /usr/local/lib/systemd/system/vault.service
+
+- name: ensure vault dir exists
+  file:
+    path: /etc/vault
+    recurse: yes
+    state: directory
+ 
+- name: copy vault config
+  copy:
+    src: vault-config.hcl
+    dest: /etc/vault/vault-config.hcl
+
+  register: vault_config
+
+- name: enable and start vault
+  systemd:
+    name: vault
+    daemon_reload: yes
+    enabled: yes
+    state: started
+

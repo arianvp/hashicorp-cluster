@@ -1,0 +1,17 @@
+{% if ansible_host in groups.masters %}
+server {
+  enabled = true
+  bootstrap_expect = {{ groups.masters | length }}
+}
+{% else %}
+client {
+  enabled = true
+}
+{% endif %}
+
+advertise {
+  http = "{{ private_ip }}"
+  rpc = "{{ private_ip }}"
+  serf = "{{ private_ip }}"
+}
+

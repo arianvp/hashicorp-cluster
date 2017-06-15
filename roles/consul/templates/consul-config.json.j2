@@ -1,0 +1,25 @@
+
+{% set filtered_list = [] %}
+
+{% for host in groups.masters %}
+{% if hostvars[host].private_ip != private_ip %}
+  {{ filtered_list.append(hostvars[host].private_ip) }}
+{% endif %}
+{% endfor %}
+{
+  "retry_join": {{ filtered_list | to_json }}
+
+  {% if ansible_host in groups.masters %} ,
+  "server": true,
+  "bootstrap_expect": {{ groups.masters | length }}
+  {% endif %}
+  ,
+  "ports": {
+    "dns": 53
+  },
+  "recursors": [
+    "8.8.8.8",
+    "8.8.4.4"
+  ],
+  "advertise_addr": "{{ private_ip }}"
+}

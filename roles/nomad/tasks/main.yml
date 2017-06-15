@@ -1,0 +1,39 @@
+- name: unarchive nomad
+  unarchive:
+    src: nomad_0.5.6_linux_amd64.zip
+    dest: /usr/local/bin
+
+- name: set executable bit for nomad
+  file:
+    path: /usr/local/bin/nomad
+    mode: a+x
+
+- name: ensure systemd dir exists
+  file:
+    path: /usr/local/lib/systemd/system
+    recurse: yes
+    state: directory
+
+- name: copy nomad service
+  copy:
+    src: nomad.service
+    dest: /usr/local/lib/systemd/system/nomad.service
+
+- name: ensure nomad dir exists
+  file:
+    path: /etc/nomad
+    recurse: yes
+    state: directory
+  
+- name: copy nomad config
+  template:
+    src: nomad-config.hcl.j2
+    dest: /etc/nomad/nomad-config.hcl
+
+- name: enable and start nomad
+  systemd:
+    name: nomad
+    daemon_reload: yes
+    enabled: yes
+    state: started
+  

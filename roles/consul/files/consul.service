@@ -1,0 +1,11 @@
+[Unit]
+Requires=network-online.target
+After=network-online.target
+Description=Consul
+
+[Service]
+ExecStartPre=/bin/mkdir -p /var/lib/consul
+ExecStart=/usr/local/bin/consul agent -config-dir /etc/consul -data-dir /var/lib/consul
+
+[Install]
+WantedBy=multi-user.target

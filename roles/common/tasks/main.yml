@@ -1,0 +1,15 @@
+- name: 'install unzip'
+  apt:
+    name: unzip
+    state: present
+
+- name: 'enable up firewall'
+  ufw:
+    state: enabled
+    logging: on
+
+
+- name: 'allow private'
+  ufw:
+    rule: allow
+    src: 10.8.146.75/31

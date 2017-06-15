@@ -1,0 +1,11 @@
+[Unit]
+Requires=network-online.target
+After=network-online.target
+Description=Nomad
+
+[Service]
+ExecStartPre=/bin/mkdir -p /var/lib/nomad
+ExecStart=/usr/local/bin/nomad agent -config /etc/nomad -data-dir /var/lib/nomad
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,44 @@
+- name: unarchive consul
+  unarchive:
+    src: consul_0.8.4_linux_amd64.zip
+    dest: /usr/local/bin
+
+- name: set executable bit for consul
+  file:
+    path: /usr/local/bin/consul
+    mode: a+x
+
+- name: ensure systemd dir exists
+  file:
+    path: /usr/local/lib/systemd/system
+    recurse: yes
+    state: directory
+
+- name: copy consul service
+  copy:
+    src: consul.service
+    dest: /usr/local/lib/systemd/system/consul.service
+
+- name: ensure consul dir exists
+  file:
+    path: /etc/consul
+    recurse: yes
+    state: directory
+
+- name: copy consul config
+  template:
+    src: consul-config.json.j2
+    dest: /etc/consul/consul-config.json
+  register: consul_config
+
+- name: enable and start consul
+  systemd:
+    name: consul
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+- name: set resolvconf
+  copy:
+    src: resolv.conf
+    dest: /etc/resolv.conf

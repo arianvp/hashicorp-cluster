@@ -1,0 +1,11 @@
+[Unit]
+Requires=network-online.target
+After=network-online.target
+Description=Vault
+
+[Service]
+ExecStartPre=/bin/mkdir -p /var/lib/vault
+ExecStart=/usr/local/bin/vault server -config /etc/vault
+
+[Install]
+WantedBy=multi-user.target
